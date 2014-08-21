@@ -1,0 +1,135 @@
+\documentclass[a4paper,11pt,twoside,twocolumn]{article}
+\usepackage{amsmath}
+\usepackage{adjmulticol}
+\usepackage{mathtools}
+\usepackage{algpseudocode}
+\usepackage{sectsty}
+\usepackage{fancyhdr}
+\pagestyle{fancyplain}
+\fancyhead{}
+\fancyfoot[L]{}
+\fancyfoot[C]{}
+\fancyfoot[R]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\headheight}{13.6pt}
+
+
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}}
+\title{
+  \normalfont \normalsize
+  \horrule{0.5pt}
+  \huge T1-S1
+  \horrule{2pt}
+}  
+\author{Kaung Htet - A0105860L}
+\date{20 August 2014}
+
+\begin{document}
+
+
+% (a)
+\subsection{(a)}
+
+\begin{center}
+  \begin{tabular}{|c|c|c|}
+    \hline
+    n & $h(n)$ & $d(n)$ \\ \hline
+    1 & 1 & 0 \\
+    2 & 2 & 1 \\
+    3 & 2 & 2 \\
+    4 & 3 & 2 \\
+    5 & 3 & 3 \\
+    6 & 3 & 3 \\
+    7 & 3 & 3 \\
+    8 & 4 & 3 \\
+    9 & 4 & 4 \\
+    10 & 4 & 4 \\
+    11 & 4 & 4 \\
+    12 & 4 & 4 \\
+    13 & 4 & 4 \\
+    14 & 4 & 4 \\
+    15 & 4 & 4 \\
+    16 & 5 & 4 \\
+    17 & 5 & 5 \\
+    18 & 5 & 5 \\
+    19 & 5 & 5 \\
+    20 & 5 & 5 \\
+    21 & 5 & 5 \\
+    22 & 5 & 5 \\
+    23 & 5 & 5 \\
+    24 & 5 & 5 \\
+    25 & 5 & 5 \\
+    31 & 5 & 5 \\
+    32 & 6 & 5 \\
+    33 & 6 & 6 \\
+    63 & 6 & 6 \\
+    64 & 7 & 6 \\
+    65 & 7 & 7 \\
+    100 & 7 & 7 \\
+    127 & 7 & 7 \\
+    128 & 8 & 7 \\
+    129 & 8 & 8 \\
+    100 & 7 & 7 \\
+    1023 & 10 & 10 \\
+    1024 & 11 & 10 \\
+    1025 & 11 & 11 \\
+    $10^6$ & 20 & 20 \\
+    $10^9$ & 30 & 30 \\ \hline
+
+  \end{tabular}
+\end{center}
+
+\subsection{(b)}
+
+\begin{multicols}{2}
+  
+  \begin{algorithm}
+    \caption{Repeated-halving:$h(n)$}\label{Repeated-halving:$h(n)$}
+    \begin{algorithmic}
+      \State $step\gets 0$
+      \While{$n\neq 0$}
+        \State $n\gets n/2$
+        \State $step\gets step+1$
+      \EndWhile
+      \State \textbf{return} $step$
+    \end{algorithmic}
+  \end{algorithm}
+ 
+\columnbreak
+ 
+  \begin{algorithm}
+    \caption{Repeated-doubling:$d(n)$}\label{Repeated-doubling:$d(n)$}
+    \begin{algorithmic}
+      \State $start\gets 1$
+      \State $step\gets 0$
+      \While{$start < n$}
+        \State $start\gets start*2$
+        \State $step\gets step+1$
+      \EndWhile
+      \State \textbf{return} $step$
+    \end{algorithmic}
+  \end{algorithm}
+
+\end{multicols}
+\subsection{(c)}
+In repeated-halving process, the number $n$ gets halved in each
+iteration. But the iteration doesn't stop when $n$ reaches to 1. It
+goes an additional iteration and stops when $n$ reaches to
+0. The number of steps will be equivalent to the floor of the
+$log_2$ plus one for the additional iteration.
+
+However, in repeated-doubling process, the number $n$ gets doubled and
+it starts from 1. So the number of steps is the ceiling of $log_2$.
+\subsection{(d)}
+
+\begin{equation*}
+  h(n) = \floor*{\log_2 n} + 1
+\end{equation*}
+\begin{equation*}
+  d(n) = \ceil*{\log_2 n}
+\end{equation*}
+
+\end{document}
