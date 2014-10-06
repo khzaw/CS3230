@@ -6,7 +6,7 @@
      *
      * Student:   Kaung Htet
      * Tutorial:  G2 
-     * Program:   Name of Program, 
+     * Program:   Recruting Interns V2, Task C
      * Language:  Java
      * Purpose:   Skeleton code for Programming Assignment 1.
      *            Student MUST use the skeleton code and fill
@@ -213,6 +213,7 @@ class skeleton {
       N = scanner.nextInt(); // no of interns
 
       branches = new int[M];
+      count = new int[M];
       interns = new int[N];
       W = new boolean[N];
 
