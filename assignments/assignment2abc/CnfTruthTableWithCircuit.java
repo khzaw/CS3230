@@ -28,26 +28,55 @@ class CnfTruthTableWithCircuit {
     for(int t = 0; t < T; t++) {
       M = scanner.nextInt();    // gates
       gates = new Gate[M];
-      N = scanner.nextInt();    // variables
+      N = scanner.nextInt();    // variable literals
       for(int m = 0; m < M; m++) {
         gates[m] = scanner.nextGate();
       }
+      printTruthTable(pr);
     }
 
-    printTruthTable(pr);
     pr.close();
   }
 
   public static void printTruthTable(PrintWriter pr) {
     for(int i = 0; i < (1 << N) ; i++) {
-        // int x = (bitCalculate()) ? 1 : 0;
-        // pr.println(x);
-        System.out.println(i);
+        int x = (bitCalculate(i)) ? 1 : 0;
+        pr.println(x);
     }
   }
 
-  public static boolean bitCalculate() {
-    return false;
+  public static boolean bitCalculate(int n) {
+    boolean[] bits = toBitArray(n);
+    // printArray(bits);
+    int index = -1;
+    for(int g = 0; g < gates.length; g++) {
+        Gate gate = gates[g];
+        index = N + g;
+        if(gate.gate == G.AND) {
+          bits[index] = bits[gate.a - 1] && bits[gate.b - 1];
+        } else if(gate.gate == G.OR) {
+          bits[index] = bits[gate.a - 1] || bits[gate.b - 1];
+        } else if(gate.gate == G.NOT) {
+          bits[index] = !bits[gate.a - 1];
+        }
+    }
+    return bits[index];
+  }
+
+  private static boolean[] toBitArray(int number) {
+    boolean[] bits = new boolean[M+N];
+    for(int i = 0; i < N; i++) {
+        bits[i] = (number & 1 << (N - 1 - i)) != 0;
+    }
+    return bits;
+  }
+
+  private static void printArray(boolean[] bits) {
+    for(int i = 0; i < bits.length; i++) {
+        int x = (bits[i]) ? 1 : 0;
+        System.out.print(x);
+    }
+    System.out.println();
   }
 }
 
@@ -109,10 +138,12 @@ class CNFScanner {
         cur = bis.read();
       }
 
-      switch(result) {
-        case "AND" : gate = G.AND;  break;
-        case "OR" : gate = G.OR; break;
-        case "NOT" : gate = G.NOT; break;
+      if(result.equals("AND")) {
+        gate = G.AND;
+      } else if(result.equals("OR")) {
+        gate = G.OR;
+      } else if(result.equals("NOT")) {
+        gate = G.NOT;
       }
     } catch(IOException ioe) {
       result = null;
