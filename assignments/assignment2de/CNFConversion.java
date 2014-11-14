@@ -17,6 +17,7 @@ import java.util.*;
 class CNFConversion {
   public static int T, M, N;
   public static Gate[] gates;
+  public static ArrayList<ArrayList<Integer>> clauses;
 
   public static void main(String[] args) {
     CNFScanner scanner = new CNFScanner(System.in);
@@ -30,9 +31,48 @@ class CNFConversion {
       for(int m = 0; m < M; m++) {
         gates[m] = scanner.nextGate();
       }
+      convertFormula(pr);
     }
 
     pr.close();
+  }
+
+  private static void convertFormula(PrintWriter pr) {
+    // first int K = the number of literals in that clause
+    // the next K int = describe the literals
+    clauses = new ArrayList<ArrayList<Integer>>();
+    for(int g = 0; g < gates.length; g++) {
+        switch(gates[g].gate) {
+          case OR:
+            clauses.add(new ArrayList<Integer>(Arrays.asList(N+g+1, -gates[g].a)));
+            clauses.add(new ArrayList<Integer>(Arrays.asList(N+g+1, -gates[g].b)));
+            clauses.add(new ArrayList<Integer>(Arrays.asList(-(N+g+1), gates[g].a, gates[g].b)));
+            break;
+          case AND:
+            clauses.add(new ArrayList<Integer>(Arrays.asList(-(N+g+1), gates[g].a)));
+            clauses.add(new ArrayList<Integer>(Arrays.asList(-(N+g+1), gates[g].b)));
+            clauses.add(new ArrayList<Integer>(Arrays.asList(N+g+1, -gates[g].a, -gates[g].b)));
+            break;
+          case NOT:
+            clauses.add(new ArrayList<Integer>(Arrays.asList(N+g+1, gates[g].a)));
+            clauses.add(new ArrayList<Integer>(Arrays.asList(-(N+g+1), -gates[g].a)));
+            break;
+          default: break;
+        }
+    }
+    clauses.add(new ArrayList<Integer>(Arrays.asList(N+M)));
+
+    // printing answer
+    pr.println(clauses.size());
+    for(ArrayList<Integer> clause : clauses) {
+      pr.print(clause.size());
+      for(int literal : clause) {
+        pr.print(" ");
+        pr.print(literal);
+      }
+      pr.println();
+    }
+
   }
 }
 
