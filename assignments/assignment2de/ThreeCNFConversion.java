@@ -17,6 +17,7 @@ import java.util.*;
 class ThreeCNFConversion {
   public static int T, M, N;
   public static Gate[] gates;
+  public static ArrayList<ArrayList<Integer>> clauses;
 
   public static void main(String[] args) {
     CNFScanner scanner = new CNFScanner(System.in);
@@ -30,9 +31,62 @@ class ThreeCNFConversion {
       for(int m = 0; m < M; m++) {
         gates[m] = scanner.nextGate();
       }
+      convert3CNFFormula(pr);
     }
 
     pr.close();
+  }
+
+  private static void convert3CNFFormula(PrintWriter pr) {
+    clauses = new ArrayList<ArrayList<Integer>>();
+    int intermediate = N + M + 1;
+    for(int g = 0; g < gates.length; g++) {
+        int current = N + g + 1;
+        switch(gates[g].gate) {
+          case OR:
+            clauses.add(new ArrayList<Integer>(Arrays.asList(N+g+1, -gates[g].a, intermediate)));
+            clauses.add(new ArrayList<Integer>(Arrays.asList(N+g+1, -gates[g].a, -intermediate)));
+
+            clauses.add(new ArrayList<Integer>(Arrays.asList(N+g+1, -gates[g].b, intermediate)));
+            clauses.add(new ArrayList<Integer>(Arrays.asList(N+g+1, -gates[g].b, -intermediate)));
+
+            clauses.add(new ArrayList<Integer>(Arrays.asList(-(N+g+1), gates[g].a, gates[g].b)));
+            break;
+          case AND:
+            clauses.add(new ArrayList<Integer>(Arrays.asList(-(N+g+1), gates[g].a, intermediate)));
+            clauses.add(new ArrayList<Integer>(Arrays.asList(-(N+g+1), gates[g].a, -intermediate)));
+
+            clauses.add(new ArrayList<Integer>(Arrays.asList(-(N+g+1), gates[g].b, intermediate)));
+            clauses.add(new ArrayList<Integer>(Arrays.asList(-(N+g+1), gates[g].b, -intermediate)));
+
+            clauses.add(new ArrayList<Integer>(Arrays.asList(N+g+1, -gates[g].a, -gates[g].b)));
+            break;
+          case NOT:
+            clauses.add(new ArrayList<Integer>(Arrays.asList(N+g+1, gates[g].a, intermediate)));
+            clauses.add(new ArrayList<Integer>(Arrays.asList(N+g+1, gates[g].a, -(intermediate))));
+
+            clauses.add(new ArrayList<Integer>(Arrays.asList(-(N+g+1), -gates[g].a, intermediate)));
+            clauses.add(new ArrayList<Integer>(Arrays.asList(-(N+g+1), -gates[g].a, -(intermediate))));
+            break;
+          default:
+            break;
+        }
+    }
+    int second = intermediate + 1;
+
+    clauses.add(new ArrayList<Integer>(Arrays.asList(N+M, intermediate, second)));
+    clauses.add(new ArrayList<Integer>(Arrays.asList(N+M, -intermediate, second)));
+    clauses.add(new ArrayList<Integer>(Arrays.asList(N+M, intermediate, -second)));
+    clauses.add(new ArrayList<Integer>(Arrays.asList(N+M, -intermediate, -second)));
+    // printing answer
+    pr.println(clauses.size());
+    for(ArrayList<Integer> clause: clauses) {
+      pr.print(clause.size());
+      for(int literal: clause) {
+        pr.print(" "); pr.print(literal);
+      }
+      pr.println();
+    }
   }
 }
 
